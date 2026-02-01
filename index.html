@@ -8,6 +8,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
 :root{
   --rose-500:#ec4899;
   --rose-600:#db2777;
@@ -26,12 +31,16 @@ body{
 }
 
 /* ===== Fireworks ===== */
-#fireworks{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
+#fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
 }
+
 
 .firework-particle{
   position:fixed;
@@ -263,15 +272,21 @@ const roseSVG=`
 </g>
 </svg>`;
 
-/* ===== Petals ===== */
+let petalCount = 0;
+
 function createPetal(){
+  if(petalCount > 30) return; // max 30 petals at a time
+  petalCount++;
   const p=document.createElement("div");
   p.className="rose-petal "+["layer-back","layer-mid","layer-front"][Math.floor(Math.random()*3)];
   p.innerHTML=roseSVG;
   p.style.left=Math.random()*100+"vw";
   p.style.animationDuration=10+Math.random()*10+"s";
   document.body.appendChild(p);
-  setTimeout(()=>p.remove(),20000);
+  setTimeout(()=>{
+    p.remove();
+    petalCount--;
+  },20000);
 }
 
 /* ===== Fireworks ===== */
@@ -362,15 +377,16 @@ function animateFireworks(){
 /* ===== Buttons ===== */
 let scale=1;
 
-yesBtn.onclick=()=>{
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+yesBtn.onclick = () => {
   question.style.display="none";
   success.style.display="block";
   music.play();
 
-  setInterval(createPetal,300);
-  setInterval(launchRocket,500);
+  setInterval(createPetal, isMobile ? 600 : 300);
+  setInterval(launchRocket, isMobile ? 1000 : 500);
 
-  // 🎆 BIG FINALE
   setTimeout(()=>{
     for(let i=0;i<15;i++){
       setTimeout(launchRocket,i*150);
@@ -379,6 +395,7 @@ yesBtn.onclick=()=>{
 
   animateFireworks();
 };
+
 
 noBtn.onpointerenter = () => {
   if (scale < .3) return;
