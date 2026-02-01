@@ -210,6 +210,9 @@ button{
 
 <canvas id="fireworks"></canvas>
 
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <div class="container">
   <div class="card">
@@ -239,7 +242,7 @@ const yesBtn=document.getElementById("yes-btn");
 const noBtn=document.getElementById("no-btn");
 const question=document.getElementById("question-section");
 const success=document.getElementById("success-message");
-
+const music=document.getElementById("bg-music");
 
 /* ===== Sakura Petal SVG ===== */
 const roseSVG=`
